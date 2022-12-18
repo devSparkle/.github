@@ -1,0 +1,20 @@
+name: Deploy to Production
+
+on:
+  workflow_call:
+    secrets:
+      PORTAINER_WEBHOOK:
+        description: "The URL for the Portainer stack update webhook"
+        required: true
+
+jobs:
+  production:
+    runs-on: self-hosted
+    timeout-minutes: 5
+    
+    environment: production
+    concurrency: production
+    
+    steps:
+      - name: Call Webhook
+        run: curl -X POST "${{ secrets.PORTAINER_WEBHOOK }}"
